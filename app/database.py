@@ -10,11 +10,13 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL is not set in .env")
 
+# Engine config (optimized for Supabase + Railway)
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    pool_size=5,         # good default
-    max_overflow=10,     # handles spikes
+    pool_size=3,          # safer for free tier
+    max_overflow=2,       # avoids hitting limits
+    pool_timeout=30,
 )
 
 SessionLocal = sessionmaker(
